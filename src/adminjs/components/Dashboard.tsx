@@ -14,7 +14,6 @@ export default function Dashboard(){
   async function fetchDashboardData() {
     const res = await api.getDashboard()
     setResources(res.data)
-    
   }
   
   return (
