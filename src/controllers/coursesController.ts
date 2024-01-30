@@ -4,6 +4,7 @@ import { getPaginationParams } from "../helpers/getPaginationParams";
 import { AuthenticatedRequest } from "../middlewares/auth";
 import { likeService } from "../services/likeService";
 import { favoriteService } from "../services/favoriteService";
+import { Course } from "../models";
 
 export const coursesController = {
   //GET /courses/featured
@@ -22,6 +23,17 @@ export const coursesController = {
     try {
       const newestCourses = await courseService.getTopTenNewest()
       return res.json(newestCourses)
+    } 
+     catch (err) {
+      if (err instanceof Error) return res.status(400).json({ message: err.message })
+    }
+  },
+
+  //GET /courses/popular
+  popular:async (req:Request, res:Response) => {
+    try {
+      const topTen = await courseService.getTopTenByLikes()
+      return res.json(topTen)
     } 
      catch (err) {
       if (err instanceof Error) return res.status(400).json({ message: err.message })
