@@ -1,3 +1,4 @@
+import { where } from "sequelize"
 import { User } from "../models"
 import { EpisodeInstance } from "../models/Episode"
 import { UserCreationAttributes } from "../models/User"
@@ -50,6 +51,15 @@ export const userService = {
     //  affectedRows contém o numero de linhas afetadas // updatedUsers contém um array dos usuários afetados (no caso apenas 1)
     const [affectedRows, updatedUsers] = await User.update(attributes, { where: {id}, returning: true })
     return updatedUsers[0]
+  },
+
+  updatePassword:async (id:number, password:string) => {
+     const [ affectedRows, updateUSers ] = await User.update({ password }, {
+      where: { id },
+      returning: true,
+      individualHooks: true
+     })
+     return updateUSers[0]
   },
 
   getKeepWatchingList: async (id: number) => {

@@ -26,9 +26,29 @@ export const usersController = {
         birth
       })
       return res.json(updatedUser)
-    } catch (err) {
+    } 
+     catch (err) {
       if(err instanceof Error) return res.status(400).json({ message: err.message }) 
     }
+  },
+
+  //PUT /users/current/password
+  updatePassword:async (req:AuthenticatedRequest, res:Response) => {
+    const user = req.user!
+    const { currentPassword, newPassword } = req.body
+
+    user.checkPassword(currentPassword,async (err, isSame) => {
+        try {
+          if(err) throw new Error('Erro ao verificar senha atual')
+          if(!isSame) throw new Error('Senha incorreta!')
+          
+          await userService.updatePassword(user.id, newPassword)
+          return res.status(204).send()
+        }
+         catch (err) {
+          if(err instanceof Error) return res.status(400).json({ message: err.message }) 
+         }
+  })
   },
 
   //GET /users/current/watching
