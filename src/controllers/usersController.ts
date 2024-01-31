@@ -12,7 +12,25 @@ export const usersController = {
       if(err instanceof Error) return res.status(400).json({ message: err.message }) 
     }
   },
-  
+  //PÙT /users/current
+  update:async (req:AuthenticatedRequest, res:Response) => {
+    const userId = req.user!.id
+    const { firstName, lastName, email, phone, birth } = req.body
+    
+    try {
+      const updatedUser = await userService.update(userId, {
+        firstName,
+        lastName,
+        email,
+        phone,
+        birth
+      })
+      return res.json(updatedUser)
+    } catch (err) {
+      if(err instanceof Error) return res.status(400).json({ message: err.message }) 
+    }
+  },
+
   //GET /users/current/watching
   watching:async (req:AuthenticatedRequest, res: Response) => {
     const { id } = req.user!

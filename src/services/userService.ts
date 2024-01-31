@@ -40,6 +40,18 @@ export const userService = {
     return user  
   },
 
+  update:async (id:number, attributes: {
+    firstName: string
+    lastName: string
+    phone: string
+    birth: Date
+    email: string
+  }) => {
+    //  affectedRows contém o numero de linhas afetadas // updatedUsers contém um array dos usuários afetados (no caso apenas 1)
+    const [affectedRows, updatedUsers] = await User.update(attributes, { where: {id}, returning: true })
+    return updatedUsers[0]
+  },
+
   getKeepWatchingList: async (id: number) => {
     const userWithWatchingEpisodes = await User.findByPk(id, {
       include: {
